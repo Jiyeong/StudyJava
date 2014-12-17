@@ -1,0 +1,874 @@
+		<!-- 로그인 영역 -->
+		<section class='login' style='display:none;'>
+			<div class='login-area'>
+				<button class='login-close' 
+				onclick="closeLayer('login'); closeLayer('find-pw-area'); return false;"
+				type='button'>닫기</button>
+				<fieldset class='login'>
+						<legend class='sr-only'>로그인</legend>
+						<form name='form-login' id='form-login' method='post'>
+							<div class='row'>
+								<div class='col-lg-9 col-sm-9 col-xs-8'></div>
+								
+							</div>
+						</form>
+				</fieldset>
+			</div>
+		</section>
+		
+		<header>
+			<!-- 웹 -->
+			<!-- 로그인 영역 : S -->
+		<section class="gnb-mem">
+			<div class="login-area">
+				<button class="btn-gnb-close" onclick="closeLayer('gnb-mem'); closeLayer('find-pw-area');return false;" type="button">닫기</button>
+				<fieldset class="login">
+					<legend class="sr-only">로그인</legend>
+
+					  <form name="formLogin" id="formLogin" method="post">
+						<div class="row">
+							<div class="col-lg-9 col-sm-9 col-xs-8">
+								<div class="form-group">
+							<label class="sr-only" for="login_id">아이디</label>
+							<input name="login_id" class="form-control" id="login_id" style="-ms-ime-mode: disabled;" onkeyup="GJF_Only_Email(this);" type="text" placeholder="아이디 또는 이메일 ">
+							<input name="refurl" id="refurl" type="hidden" value="">
+							<input name="Cururl" id="Cururl" type="hidden" value="">
+							</div>
+							<div class="form-group">
+							<label class="sr-only" for="login_pwd">비밀번호</label>
+							<input name="login_pwd" class="form-control" id="login_pwd" onkeypress="loginiKeyPress(event)" type="password" maxlength="20" placeholder="비밀번호">
+							</div>
+							</div>
+							<div class="col-lg-3 col-sm-3 col-xs-4 pls0">
+								<button class="btn btn-success btn-lg btn-block btn-login" onclick="fn_login_form_chk();" type="button"><span class="btn-gnb-login">로그인</span></button>
+							</div>
+						</div>
+						<!-- 아이디저장 / 비밀번호찾기 : S -->
+						<ul class="idpw list-unstyled list-inline">
+						<li>
+							<div class="checkbox">
+							<label>
+								<input name="save_id" onclick="fn_confirm_save(this);" type="checkbox"> 아이디 저장
+							</label>
+							<em>|</em>
+						</div>
+						</li>
+						<li class="cur" onclick="openLayer('find-pw-area');return false;">비밀번호 찾기</li>
+					</ul> <!--/.idpw -->
+					<blockquote class="alarm text-primary"></blockquote> <!-- 아이디저장 메시지 알람 -->
+					<input name="user_id" id="user_id" type="hidden">
+					<input name="pwd" id="pwd" type="hidden">
+					<input name="date" id="date" type="hidden">
+					<input name="req_Url" id="req_Url" type="hidden" value="/">
+				  </form>
+
+				</fieldset> <!--/.login -->
+			</div> <!--/.login-area -->
+
+			<!-- 비밀번호 찾기 : S -->
+			<div class="find-pw-area">
+				<fieldset class="find-pw">
+					<button class="btn-gnb-close" onclick="closeLayer('find-pw-area');return false;" type="button">닫기</button>
+					<legend>비밀번호 찾기</legend>
+					<p class="text-left text-muted xsmall">가입하신 이메일로 임시 비밀번호를 보내드립니다.</p>
+					<form class="form-horizontal">
+					<div class="form-group m0">
+					  <label class="col-lg-2 col-xs-3 pls0 control-label" for="inputEmail"><strong>이메일</strong></label>
+					  <div class="col-lg-10 col-xs-9 ps0">
+						<input class="form-control" id="psw_email" type="email" placeholder="이메일 주소"> <!-- 이메일주소 입력 -->
+					  </div>
+					</div>
+					<div class="col-lg-offset-2 col-lg-10 col-xs-12 pls0 note">
+							아이디, 비밀번호 찾기 추가 문의는 <a class="text-primary" href="http://www.baemin.com/service/qna">문의하기</a>에 내용을 남겨주세요. 고객센터에서 확인 후 회신 드리겠습니다.
+					</div>
+					<div class="form-group of-h col-lg-12 col-xs-12 m0 ps0">
+					  <button class="btn btn-success btn-block" onclick="fn_pwd_find();" type="button"><span class="btn-gnb-findpw">확인</span></button>
+					</div>
+					<iframe name="hidden_login_ifrm" width="0" height="0" id="hidden_login_ifrm" src="" frameborder="0" scrolling="no" style="top: -9999px; width: 0px; position: absolute;"></iframe>
+
+					</form>
+				</fieldset> <!--/.find-pw -->
+			</div> <!--/.find-pw-area -->
+
+			<div class="join-area">
+				<div class="join-us">
+					<a class="btn btn-block btn-default" href="https://www.baemin.com/member/signup"><span class="btn-gnb-join">회원가입</span></a>
+				</div>
+			</div>
+
+		</section> <!--/.gnb-mem -->
+		<!-- 로그인 영역 : E -->
+
+
+<script type="text/javascript">
+//------------------------------------------------------------------------------
+//PURPOSE : 비밀번호 찾기
+//CREATE  : 2013-11-13 정용준
+//MODIFY  : 2014-06-24 진성광 : '비밀번호찾기' 구글애널리틱스 커스텀이벤트 추적 추가
+//------------------------------------------------------------------------------
+function fn_pwd_find()
+{
+	var regExp = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+	if(!regExp.test($("#psw_email").val()))
+	{
+		alert("유효하지 않은 이메일입니다.");
+		return false;
+	}
+	else
+	{
+		fn_send_ga('Find_Pwd', 'Click'); //구글애널리틱스 이벤트 추적
+		jQuery.support.cors = true;
+
+		$.ajax({
+			type: 'POST',
+			async: true,
+			url: '/member/pwd_find',
+			data: {
+					psw_email:$("#psw_email").val()
+			},
+			success: function(data) {
+				if (!data) return;
+				var result = JSON.parse(data);
+				if (result.Rslt_Cd=="1")
+				{
+					alert($("#psw_email").val() + "으로 비밀번호를 발송하였습니다.");
+					closeLayer('find-pw-area');
+				}
+				else if (result.Err_Cd != "")
+				{
+					alert(result.Err_Msg);
+				}
+			},
+			error:function(request,status,error){
+				alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+			}
+		});
+	}
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 유효성 체크
+//CREATE  : 2013-09-25 태승호
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_login_form_chk()
+{
+	if($("#login_id").val() == '')
+	{
+		alert("아이디를 입력해주세요.");
+		return false;
+	}
+	if($("#login_pwd").val() == '')
+	{
+		alert("비밀번호를 입력해주세요.");
+		return false;
+	}
+
+	if ($("input:checkbox[name='save_id']").is(":checked"))
+	{
+		fn_setCookie("userid",$("#login_id").val(),1000);
+	}
+	else
+	{
+		fn_deleteCookie("userid");
+	}
+	fn_login_chk();
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 이벤트 KeyUp & KeyPress 설정
+//CREATE  : 2013-11-19 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function loginiKeyPress(e)
+{
+	if (e.keyCode == 13)
+	{
+		fn_login_form_chk();
+	}
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 로그인 체크 - API호출
+//CREATE  : 2013-09-25 태승호
+//MODIFY  : 2013-11-20 태승호 : jQuery.support.cors = true; 추가 : ie9에러로 인한 추가
+//MODIFY  : 2014-06-24 진성광 : '로그인시도' 구글애널리틱스 커스텀이벤트 추적 추가
+//------------------------------------------------------------------------------
+function fn_login_chk()
+{
+	jQuery.support.cors = true;
+
+	var cur_dt = new Date();
+	var SSL_HOST_BAEMIN_WWW = "https://www.baemin.com";
+
+	$("#user_id").val($("#login_id").val());
+	$("#pwd").val($("#login_pwd").val());
+	$("#date").val(cur_dt);
+
+	fn_send_ga('User', 'Login', 'Try');  // 로그인 시도 구글 애널리틱스 추적
+
+	//$('.btn-login').attr("disabled",true);
+	$("#formLogin").attr( 'target','hidden_login_ifrm' ).attr( 'action', SSL_HOST_BAEMIN_WWW + "/member/get_api_login_chk" ).submit();
+
+//	$.ajax({
+//		url: SSL_HOST_BAEMIN_WWW+"/member/get_api_login_chk",
+//		type: "GET",
+//		dataType: "json",
+//		crossDomain:true,
+//		data: {
+//			"user_id" : $("#login_id").val(),
+//			"pwd" : $("#login_pwd").val(),
+//			"date": cur_dt
+//		},
+//		success: function(data){
+//			if(data.Mem_No >= "1")
+//			{
+//				$('.btn-login').attr("disabled",false);
+//				if ( $('#Cururl').val() == "member/signup" )
+//				{
+//					location.href = "/";
+//				}
+//				else
+//				{
+//					location.reload();
+//					return false;
+//				}
+//			}
+//			else
+//			{
+//				alert("아이디 또는 비밀번호를 확인해주세요.");
+//				$('.btn-login').attr("disabled",false);
+//				return false;
+//			}
+//		},
+//		error:function(request,status,error){
+//			alert("code:" + request.status + "\n"+"message:" + request.responseText + "\n" + "error:" + error);
+//		}
+//	});
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 아이디 저장 체크여부
+//CREATE  : 2013-10-23 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_confirm_save(checkbox)
+{
+	var isRemember;
+
+	if(checkbox.checked)
+	{
+		$(".alarm").show().html("개인 정보 보호를 위해 여러 사람이 함께 사용하는 공용 PC에서는 사용에 유의해주세요.");
+		setTimeout(function(){$(".alarm").hide();},2000)
+		isRemember = true;
+	}
+	if(!isRemember)
+	{
+		checkbox.checked = false;
+	}
+}
+
+</script>				<!-- 앱 다운로드 : S // 모바일에서만 노출 // 서비스소개의 다운로드 링크로 보냄 (디바이스별 분기) -->
+	<div class="alarm-app-down" id="mobile" onclick="fn_MobileAppLink();return false;">
+		<button id="MobileAppDownBtn" type="button">X</button>
+		<a id="MobileAppLink" href="market://details?id=com.sampleapp">지금 배달의민족 앱을 설치해보세요!</a> <!-- 테스트용 링크 -->
+	</div>
+	<section class="basic-tp-area">
+	<input name="CurClass" id="CurClass" type="hidden" value="">
+	<input name="kw" id="kw" type="hidden" value="">
+	<input name="loc_addr" id="loc_addr" type="hidden" value="서울 서초구 서초2동">
+
+		<section class="tp-area">
+			<h1><a class="ir-el" href="http://www.baemin.com">배달의민족</a></h1>
+			<div class="gnb-wrap">
+				<span class="navigation" onclick="toggleLayer('gnb','navigation');return false;">네비게이션</span>
+				<ul class="list-inline gnb">
+					<li><a onclick="openLayer('gnb-mem');return false;" href="javascript:;">로그인</a> <em>|</em></li>
+					<li><a href="https://www.baemin.com/member/signup">회원가입</a> <em>|</em></li>
+					<li><a href="http://www.baemin.com/service/faq">고객센터</a></li>
+			<!--		<li><a href="http://www.facebook.com/sharer.php?u=http://www.baemin.com/index.php"onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Facebook">Facebook
+					</a></li> -->
+				</ul>
+			</div>
+			<!-- 위치설정 : S -->
+			<fieldset class="header-loc">
+				<legend class="sr-only">위치설정</legend>
+				<div class="set-loc" onclick="toggleLayer('dong-srch','drop-down');return false;">
+				<em>내위치 :</em>
+				<span class="addr text-ellipsis" id="locText">서울 서초구 서초2동</span> <!-- 선택된 위치 노출 -->
+				<span class="drop-down">위치설정</span>
+			</div>
+
+			<!-- 현재위치 검색 : S -->
+			<div class="dong-srch">
+				<fieldset>
+					<p class="noti">현재 설정된 주소가 맞지 않으신가요?<br>동명을 검색해서 다시 설정해주세요.</p>
+					<input class="form-control" id="sch_addr" onkeyup="evtKeyUp(event)" onkeypress="evtKeyPress(event)" type="search" placeholder="동명을 입력하세요">
+					<button onclick="fn_schAddr();" type="button">찾기</button>
+				</fieldset>
+				<!-- 결과 : S -->
+				<div class="small" id="addrlist"></div>
+				<div class="set-current-loc">
+					<button class="btn btn-block btn-set-loc" onclick="fn_current_loc_set(); fn_send_ga('Location', 'Auto_Set','');return false;" type="button"><em>-</em>현재위치 자동검색</button>
+				</div>
+			</div> <!--/.dong-srch -->
+			</fieldset> <!--/.loc -->
+
+			<!-- 키워드검색 : S -->
+			<fieldset class="header-search cate-srch">
+			  <legend class="sr-only">검색</legend>
+			  <!-- 키워드 검색 필드 : S -->
+			  <div class="input-group srch">
+				<input class="form-control" id="sch_kwd" style="-ms-ime-mode: inactive;" onkeypress="evtKeyPress(event)" type="text" placeholder="업소명을 검색해주세요">
+				<span class="input-group-btn">
+					<button class="btn" onclick="fn_sch_kwd(); return false;" type="button">검색</button>
+				</span>
+			</div><!--/.srch -->
+			</fieldset> <!--/.search -->
+		<!-- 카테고리 : S -->
+		<div class="category-set main">
+			<dl class="dl-horizontal">
+				<dt class="dt-category" onclick="toggleLayer('cate-srch','dt-category');return false;">카테고리 : </dt>
+				<dd class="cate-srch">
+					<div class="cate-area">
+						<ul class="list-inline list-unstyled" id="category">
+							<li class="chicken" onclick="fn_sch_kw('치킨');">치킨 <em>|</em></li>
+							<li class="chinese" onclick="fn_sch_kw('중국집');">중국집 <em>|</em></li>
+							<li class="pizza" onclick="fn_sch_kw('피자');">피자 <em>|</em></li>
+							<li class="korean" onclick="fn_sch_kw('한식,분식');">한식,분식 <em>|</em></li>
+							<li class="jokbal" onclick="fn_sch_kw('족발,보쌈');">족발,보쌈 <em>|</em></li>
+							<li class="night" onclick="fn_sch_kw('야식');">야식 <em>|</em></li>
+							<li class="japanese" onclick="fn_sch_kw('돈까스,회,일식');">돈까스,회,일식 <em>|</em></li>
+							<li class="tang" onclick="fn_sch_kw('찜,탕');">찜,탕 <em>|</em></li>
+							<li class="dosirak" onclick="fn_sch_kw('도시락');">도시락 <em>|</em></li>
+							<li class="fastfood" onclick="fn_sch_kw('패스트푸드');">패스트푸드 <em>|</em></li>
+							<li class="theme1" onclick="fn_sch_kw('떡볶이');">떡볶이 <em>|</em></li>
+							<li class="theme2" onclick="fn_sch_kw('해장국');">해장국 <em>|</em></li>
+							<li class="theme3" onclick="fn_sch_kw('찜닭');">찜닭 <em>|</em></li>
+							<li class="summer" onclick="fn_sch_kw('냉면');">냉면, 여름메뉴 <em>|</em></li>
+							<li class="theme5" onclick="fn_sch_kw('닭발');">닭발 <em>|</em></li>
+							<li class="baro" onclick="fn_sch_kw('바로결제');">바로결제 <em>|</em></li>
+							<li class="etc" onclick="fn_sch_kw('기타');">기타 <em>|</em></li>
+							<li class="all" onclick="fn_sch_kw('모아보기');">모아보기</li>
+						</ul>
+					</div>
+					<div class="cate-control-main">
+						<a class="prev4" href="javascript:;">&lt;</a>
+						<a class="next4" href="javascript:;">&gt;</a>
+					</div>
+				</dd>
+			</dl>
+		</div> <!--/.category-set -->
+	</section> <!--/.tp-area -->
+</section> <!--/.basic-tp-area -->
+<!-- contblock : E -->
+<script type="text/javascript">
+var iphone_id = "378084485";
+var android_id = "com.sampleapp";
+var nvadkwd     = "";
+var utm_source  = "seungheenaver";
+var utm_medium  = "seungheenaverkwdad";
+var utm_content = "";
+var utm_term    = "";
+var fw_url      = "/info/fw";
+var utm_campaign;
+
+if ( nvadkwd == "" ) {
+	utm_campaign = "organicSch";
+} else {
+	utm_campaign = "nvkwdad";
+}
+
+	//메인
+	$('#MobileAppLink3').click(function(e){
+	fn_setCookie("appDown",1,1);
+		closeLayer('go-app');
+		e.stopPropagation();
+	});
+
+
+//------------------------------------------------------------------------------
+//PURPOSE : 배달의 민족 앱 다운링크 설정
+//CREATE  : 2013-11-19 태승호
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_MobileAppLink(){
+	location.href = fw_url;
+/*
+	var moblie = '';
+
+	if( moblie =='Android' || moblie =='Nexus' ) {
+		if($(window).width() > 500 && $(window).height() > 500)
+		{
+		//안드로이드 태블릿
+			downUrl = "market://details?id=com.woowahan.baedal_gp";
+		} else {
+		//안드로이드 폰
+			downUrl = "market://details?id=com.sampleapp";
+		}
+	} else if ( moblie =='Apple iPhone' || moblie =='Apple iPod Touch' ) {
+		downUrl = "http://goo.gl/d3YMO4";
+	} else if ( moblie =='iPad' ) {
+		downUrl = "http://goo.gl/3kX6YU";
+	} else if ( moblie =='Windows Phone' ) {
+		downUrl = "http://goo.gl/JtvYiO";
+	} else {
+		downUrl = "#";
+	}
+	 window.open(downUrl,'appDown','');
+	 */
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 배달의 민족 앱 실행 / 다운로드 설정
+//CREATE  : 2014-04-28 이지형
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_down_Tracking() {
+
+	var category = "banner";
+	var action   = "appdownload";
+	var label    = utm_content;
+
+	"echo $this->load->helper('woowahan/google_helper');";
+	"echo GF_Google_Evt_Tracking("+category+", "+action+", "+label+");";
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 앱설치 확인
+//CREATE  : 2014-05-13 정용준
+//MODIFY  : 2014-09-25 진성광
+//------------------------------------------------------------------------------
+function fn_Chk_App_Install() {
+
+	window.open("http://www.baemin.com/info/fwApp?utm_term="+utm_term+"&utm_source="+ utm_source + "&utm_medium=" + utm_medium + "&utm_content=" + utm_content + "&utm_campaign=" + utm_campaign, "_blank");
+	//단말 로컬에 있는 어플리케이션 실행
+	//location.replace("intent://scan/#Intent;scheme=smartbaedal;package=com.sampleapp;end");
+	//setTimeout("fn_Chk_App_Install_callback()", 1000);
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 앱 이동 혹은 앱 다운로드 페이지 이동
+//CREATE  : 2014-05-13 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_Chk_App_Install_callback() {
+
+	try {
+		location.replace("intent://scan/#Intent;scheme=smartbaedal;package=com.sampleapp;end");
+
+	} catch (e) {
+		location.replace("market://details?id=com.sampleapp&referrer=utm_term="+utm_term+"&utm_source="+ utm_source + "&utm_medium=" + utm_medium + "&utm_content=" + utm_content + "&utm_campaign=" + utm_campaign);
+	}
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 배달의 민족 앱 실행 / 다운로드 설정 - IOS
+//CREATE  : 2014-04-28 이지형
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_IsInstalledIos() {
+
+	//var appstoreUrl = "http://www.baemin.com/info/fw/?utm_term=&utm_source="+ utm_source + "&utm_medium=" + utm_medium + "&utm_content=" + utm_content + "&utm_campaign=" + utm_campaign;
+	var appstoreUrl = "http://goo.gl/d3YMO4";
+
+	var url = "smartbaedal://";
+	var clickedAt = + new Date;
+
+	AppCheckTimer = setTimeout(function() {
+		if(+new Date - clickedAt < 2000) {
+			if(confirm("앱스토어에서 다운로드 받으시겠습니까?")) {
+
+				location.href = appstoreUrl;
+				return false;
+			}
+		}
+	}, 1500);
+	location.href = url;
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 배달의 민족 앱 실행 / 다운로드 설정
+//CREATE  : 2014-04-28 이지형
+//MODIFY  :
+//------------------------------------------------------------------------------
+$('#launch').click(function(){
+	location.href = fw_url;
+/*
+	var moblie = '';
+
+	if( moblie =='Apple iPhone' || moblie =='Apple iPod Touch' || moblie =='iPad' ) {
+		fn_IsInstalledIos();
+	} else if( moblie =='Android' || moblie =='Nexus' ) {
+		fn_Chk_App_Install();
+	} else {
+		location.href = "https://play.google.com/store/apps/details?id=com.sampleapp"
+	}
+	*/
+});
+
+//------------------------------------------------------------------------------
+//PURPOSE : 모바일일 경우 닫기버튼을 통해 닫았는지 구분(닫기버튼으로 닫을 시 1일 안보이게 함)
+//CREATE  : 2013-11-20 태승호
+//MODIFY  :
+//------------------------------------------------------------------------------
+$(document).ready(function(){
+
+	$('#MobileAppDownBtn').click(function(e){
+		closeLayer('alarm-app-down');
+		fn_setCookie("appDown",1,1);
+		e.stopPropagation();
+	});
+
+	//업소상세용 - 쿠기 없음
+	$('#MobileAppDownBtn2').click(function(e){
+		closeLayer('alarm-shopinfo-app-down');
+		e.stopPropagation();
+	});
+
+	//페이지 로드 시, 위치설정 여부 체크
+	fn_set_location();
+
+	if (fn_getCookie('appDown') == 1) {
+		closeLayer('alarm-app-down');
+	}
+
+	if ( fn_getCookie('appDown3') == 1 ) {
+		closeLayer('go-app');
+	}
+
+	//장치 아이디 설정
+	if (fn_getCookie('dvcid') == "") {
+		fn_set_dvc_id();
+	}
+});
+
+//------------------------------------------------------------------------------
+//PURPOSE : 장치 아이디 설정
+//CREATE  : 2013-11-26 태승호
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_set_dvc_id(){
+
+	var dvc_ip = '146323327';
+
+	var d = new Date();
+	var dvc_id = fn_b64(dvc_ip + makeZeros(d.getFullYear(),4) +	makeZeros(d.getMonth()+1,2) + makeZeros(d.getDate(),2) + makeZeros(d.getHours(),2) + makeZeros(d.getMinutes(),2) + makeZeros(d.getSeconds(),2));
+
+	fn_setCookie("dvcid",dvc_id, 365 * 7000);
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : base64 인코딩
+//CREATE  : 2013-11-26 태승호
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_b64(InStr){
+
+  var ttb = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  var len_1 = InStr.length;
+  var len_res = InStr.length % 3;
+  var len_div = len_1 - len_res;
+  var ra = new makeArray(4);
+  var i=0;
+  var Stat = "";
+  var str="";
+  while(1)
+  {
+    if( i >= len_1 )
+         break;
+
+    if( i >= len_div )
+         Stat = "End";
+    A = eval(InStr.charCodeAt(i++));
+    B = eval(InStr.charCodeAt(i++));
+    C = eval(InStr.charCodeAt(i++));
+    if( i > len_div )
+    {
+        Stat = "End";
+        if( len_res >= 1)
+          C = 0;
+        if( len_res == 1 )
+          B = 0;
+    }
+    ra[1] = A >> 2;
+    ra[2] = ( (A & 3) << 4 ) + (B >> 4);
+    ra[3] = ( ( B & 15 ) << 2 ) + ( C >> 6);
+    ra[4] = C & 63;
+    if( Stat == "End" && len_res >= 1 )
+          ra[4] = 64;
+    if( Stat == "End" && len_res == 1 )
+          ra[3] = 64;
+    for(k=1;k<=4;k++)
+       str = str + ttb.substr(ra[k],1);
+ }
+ return str;
+}
+//------------------------------------------------------------------------------
+//PURPOSE : 배열생성함수
+//CREATE  : 2013-11-26 태승호
+//MODIFY  :
+//------------------------------------------------------------------------------
+function makeArray(n){
+    this.length=n
+    for(var i=1; i<=n; i++){
+            this[i]=null;
+    }
+    return this
+}
+//------------------------------------------------------------------------------
+//PURPOSE : 위치 설정
+//CREATE  : 2013-10-31 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_set_location() {
+	if (fn_getCookie('loc_flag') == "")
+	{
+		if (!!navigator.geolocation) {
+			fn_setCookie("loc_flag", 1, 5);
+			navigator.geolocation.getCurrentPosition(fn_callbackSuccess,fn_callbackError);
+		} else {
+			fn_setCookie("loc_flag", 1, 5);
+			alert("이 브라우저는 Geolocation를 지원하지 않습니다");
+		}
+	}
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 현재 위치 재설정
+//CREATE  : 2013-10-31 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_current_loc_set()
+{
+	var chk = confirm("지금 계신 지역을 현재위치로 설정하시겠습니까?");
+	if (chk)
+	{
+		fn_deleteCookie("loc_flag");
+		fn_deleteCookie("addr_st");
+
+		if (fn_getCookie('loc_flag') == "")
+		{
+			if (!!navigator.geolocation) {
+				fn_setCookie("loc_flag", 1, 5);
+				navigator.geolocation.getCurrentPosition(fn_callbackSuccess,fn_callbackError);
+			} else {
+				alert("이 브라우저는 Geolocation를 지원하지 않습니다");
+			}
+		}
+	}
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 좌표 값 설정
+//CREATE  : 2013-09-26 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_callbackSuccess(position)
+{
+	var lat = position.coords.latitude;
+	var lng = position.coords.longitude;
+	var loc = lat + "," + lng;
+
+	var CurClass = $("#CurClass").val();
+	var kw = $("#kw").val();
+	var loc_addr = "서울_서초2동";
+
+	fn_setCookie("lat", lat, 5);      //위도
+	fn_setCookie("lng", lng, 5);      //경도
+
+	jQuery.support.cors = true;
+
+	$.ajax({
+		type: 'POST',
+		async: true,
+		url: '/main/set_loc',
+		data: {},
+		success: function(data) {
+			var json = JSON.parse(data);
+
+			if (json.loc.Rgn1_Cd != "")
+			{
+				if ( CurClass == "list" )
+				{
+					location.href = "http://www.baemin.com/list/" + kw + "/" + json.addr;
+				}
+				else
+				{
+					location.reload();
+				}
+			}
+		},
+		error:function(request,status,error){
+			alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+		}
+	});
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 에러 처리
+//CREATE  : 2013-09-26 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_callbackError(error)
+{
+	if ( error.code == error.PERMISSION_DENIED )
+	{
+		alert("위치 서비스 기능을 켜고 다시 시도해 주세요.");
+	}
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 주소 검색 AJAX
+//CREATE  : 2013-10-10 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_schAddr()
+{
+	var addrKw = $('#sch_addr').val();
+
+	if (addrKw.length == 0)
+	{
+		$('#addrlist').hide();
+	}
+	else
+	{
+		$('#addrlist').show();
+		jQuery.support.cors = true;
+		$.ajax({
+			type: 'POST',
+			async: true,
+			url: '/main/sch_addr',
+			data: {addr_kw:addrKw},
+			success: function(data) {
+				if (!data) return;
+				document.getElementById('addrlist').innerHTML = data;
+			},
+			error:function(request,status,error){
+				if (request.status != "0" )
+				{
+					alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+				}
+			}
+		});
+	}
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 주소 설정
+//CREATE  : 2013-10-10 정용준
+//MODIFY  : 2014-06-25 진성광 : '주소 설정' 구글애널리틱스 커스텀이벤트 추적 추가
+//------------------------------------------------------------------------------
+function fn_addr_set(obj){
+
+	var lat, lng, loc, Rgn3_Cd, addr_st;
+
+	var kw = decodeURIComponent($('#kw').val());
+	var curClass = $("#CurClass").val();
+
+	lat  = $("#lat_" + obj).val();
+	lng  = $("#lng_" + obj).val();
+	rgn3 = $("#Rgn3_" + obj).val();
+
+	addr    = encodeURIComponent($("#addr_" + obj).val());                 //한글을 쿠키에 저장할 때 깨짐을 방지
+	addr_st = encodeURIComponent($("#addr_st_" + obj).val());              //한글을 쿠키에 저장할 때 깨짐을 방지
+
+	loc = lat + "," + lng;
+
+	fn_setCookie("lat" , lat,  5);
+	fn_setCookie("lng" , lng,  5);
+	fn_setCookie("addr", addr, 5);
+	fn_setCookie("addr_st", addr_st, 5);
+	fn_setCookie("rgn3", rgn3, 5);
+
+	if ( curClass == "list" )
+	{
+		location.href = "/list/" + kw + "/" + $("#addr_st_" + obj).val();
+	} else {
+		location.reload();
+	}
+
+	fn_send_ga( 'Location', 'Select', 'Address');    // 주소설정 이벤트 구글애널리틱스 이벤트 추적
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 추천검색어 검색
+//CREATE  : 2013-10-10 정용준
+//MODIFY  :
+//------------------------------------------------------------------------------
+function fn_sch_kw(kwd){
+
+	var kw = "";
+	var loc_addr = "서울_서초2동";
+
+	var form = document.createElement("form");
+	form.setAttribute("method","post");
+
+	kw = kwd;
+	form.setAttribute("action","http://www.baemin.com/list/" + kw + "/" + loc_addr);
+
+	document.body.appendChild(form);
+	form.submit();
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 키워드 검색
+//CREATE  : 2013-10-10 정용준
+//MODIFY  : 2014-06-25 진성광 : '키워드 검색' 구글애널리틱스 커스텀이벤트 추적 추가
+//------------------------------------------------------------------------------
+function fn_sch_kwd(){
+
+	var loc_addr = "서울_서초2동";
+
+	var form = document.createElement("form");
+	form.setAttribute("method","post");
+
+	if ( $("#sch_kwd").val() == "" )
+	{
+		form.setAttribute("action","http://www.baemin.com/list/" + $('#sch_kwd').val() );
+	}
+	else
+	{
+		form.setAttribute("action","http://www.baemin.com/list/" + $('#sch_kwd').val() + "/" + loc_addr);
+	}
+	document.body.appendChild(form);
+	form.submit();
+
+	fn_send_ga('Search', 'Click', $('#sch_kwd').val());    // 검색이벤트 구글애널리틱스 이벤트 추적
+}
+
+//------------------------------------------------------------------------------
+//PURPOSE : 이벤트 KeyUp & KeyPress 설정 (FF에서는 KeyPress만 사용가능)
+//CREATE  : 2013-10-10 정용준
+//MODIFY  : 2014-06-25 진성광 : '키워드 검색' 구글애널리틱스 커스텀이벤트 추적 추가
+//------------------------------------------------------------------------------
+function evtKeyUp(e)
+{
+	if (e.keyCode == 13) {
+		fn_schAddr();
+		return false;
+	}
+}
+
+function evtKeyPress(e)
+{
+	if (e.keyCode == 13) {
+		if( (e.currentTarget.getAttribute("id")) == "sch_kwd" )                 //검색 창에서 Enter
+		{
+			var kw = $("#sch_kwd").val();
+
+			fn_send_ga('Search', 'Enter', kw);    // 검색이벤트 구글애널리틱스 이벤트 추적
+
+			fn_sch_kw(kw);
+
+		}
+		else if( (e.currentTarget.getAttribute("id")) == "sch_addr" )           //주소 검색 창에서 Enter
+		{
+			fn_schAddr();
+		}
+		return false;
+	}
+}
+</script>
+	</header>
