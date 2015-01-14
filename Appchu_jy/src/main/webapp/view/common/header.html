@@ -1,0 +1,50 @@
+<!-- 공통 header -->
+<meta charset="UTF-8">
+<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<link rel="stylesheet" type="text/css" href="../css/jy/jy_header.css">	
+	
+<script type="text/javascript" src="../js/common.js"></script>	
+<script type='text/javascript' src='http://code.jquery.com/jquery-1.7.2.js'></script>
+
+
+
+
+<!-- 상단 고정 메뉴 -->
+<div id='cssmenu'>
+	<ul>
+		<li id='menu-icon' class='active'><a href='#'><span>Beauty Chu</span></a></li>
+		<li><a href='#'><span>Shop</span></a></li>
+		<li><a href='#'><span>Man</span></a></li>
+		<li><a href='#'><span>Woman</span></a></li>
+		<li><a href='#'><span>Celebrity</span></a></li>
+
+		<li><form method="get" action="/search" id="search">
+				<input name="q" id="search-bar" type="text" placeholder="Search..." />
+			</form></li>
+
+		<li class='user-menu active has-sub'><a href='#'>User</a>
+			<ul>
+  			<li data-dialog1="jy-logindialog" class="has-sub jy-btn-login trigger">
+  			<a href='#'>Login</a></li>
+				<li data-dialog2="jy-joindialog" class="has-sub jy-btn-join trigger">
+				<a href='#'>Join</a></li>  
+				<li class='has-sub'><a href='#'>QnA</a></li>
+			</ul></li>
+
+	</ul>
+</div>
+<!-- 상단 고정 메뉴 끝-->
+ 	<div id="wrap-chu" class="wrap-chu">
+		<!-- 작업공간 - 이파일 고치지 말고 복사해서 쓰시오...!! -->
+<!-- 로그인 회원가입 창 -->
+<div class="jy-loginjoin"></div>
+<!-- 로그인 회원가입 창 -->
+	</div>
+	
+	
+<script>
+$('.jy-loginjoin').load('templates/jy_loginJoin.html');
+</script>

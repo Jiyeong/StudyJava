@@ -1,0 +1,71 @@
+.jy-dialog {
+	-webkit-align-items: flex-start;
+  	align-items: flex-start;
+}
+
+.jy-dialog.jy-dialog--open .jy-dialog__content,
+.jy-dialog.jy-dialog--close .jy-dialog__content {
+	opacity: 1;
+	-webkit-animation-duration: 0.3s;
+	animation-duration: 0.3s;
+	-webkit-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+
+.jy-dialog.jy-dialog--open .jy-dialog__content {
+	-webkit-animation-name: anim-open;
+	animation-name: anim-open;
+}
+
+.jy-dialog.jy-dialog--close .jy-dialog__content {
+	-webkit-animation-name: anim-close;
+	animation-name: anim-close;
+}
+
+.jy-dialog.jy-dialog--open h2,
+.jy-dialog.jy-dialog--open button {
+	-webkit-animation: anim-elem 0.3s both;
+	animation: anim-elem 0.3s both;
+}
+
+.jy-dialog.jy-dialog--open h2 {
+	-webkit-animation-delay: 0.15s;
+	animation-delay: 0.15s;
+}
+
+.jy-dialog.jy-dialog--open button {
+	-webkit-animation-delay: 0.05s;
+	animation-delay: 0.05s;
+}
+
+@-webkit-keyframes anim-open {
+	0% { -webkit-transform: translate3d(0, -100%, 0); }
+	100% { -webkit-transform: translate3d(0, 0, 0); }
+}
+
+@keyframes anim-open {
+	0% { -webkit-transform: translate3d(0, -100%, 0); transform: translate3d(0, -100%, 0); }
+	100% { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+}
+
+@-webkit-keyframes anim-close {
+	0% { -webkit-transform: translate3d(0, 0, 0); }
+	100% { -webkit-transform: translate3d(0, -100%, 0); }
+}
+
+@keyframes anim-close {
+	0% { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+	100% { -webkit-transform: translate3d(0, -100%, 0); transform: translate3d(0, -100%, 0); }
+}
+
+/* Inner elements animations */
+
+@-webkit-keyframes anim-elem {
+	0% { opacity: 0; -webkit-transform: translate3d(0, -100px, 0); }
+	100% { opacity: 1; -webkit-transform: translate3d(0, 0, 0); }
+}
+
+@keyframes anim-elem {
+	0% { opacity: 0; -webkit-transform: translate3d(0, -100px, 0); transform: translate3d(0, -100px, 0); }
+	100% { opacity: 1; -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+}
