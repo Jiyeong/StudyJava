@@ -1,8 +1,8 @@
-package beautyChu.dao;
+package beautychu.dao;
 
 import java.util.Map;
 
-import beautyChu.domain.Member;
+import beautychu.domain.Member;
 
 public interface MemberDao {
 	

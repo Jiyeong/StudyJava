@@ -115,9 +115,9 @@
 			<li class="jy-mypage" id="jy-mypage">
 			<a title="마이페이지" style="text-indent: 0;">
 			<img src="../img/logo_appchu.jpg" width="20" height="20"
-								class="img-circle img-responsive" alt="" 
+								class="img-circle img-responsive" id="user-mypage" alt="" 
 								style="border-radius:5px; margin: 25px 5px;"/>
-								<span id="user-nickname"></span>					
+								<span class="user-nickname" id="user-mypage"></span>					
 			</a></li>
 			<li class="logout" id="logout">
 			<a title="로그아웃">logout</a></li>
@@ -318,13 +318,37 @@
 </div>
 
 <script>
-alert("페이지 열림!");
-console.log("페이지 열림!");
+//alert("beautyChu에 방문해 주셔서 감사합니다^^");
+//console.log("beautyChu에 방문해 주셔서 감사합니다^^");
 
 /* 사이트 열자마자 ajax로 로긴 여부 체크하여 page open */
+$.ajax({
+	type : 'post',
+	dataType : "json",
+	url : '../json/auth/loginUser.do',
+	success : function() {
+			alert("로그인 유지 중");
+			console.log("로그인 유지 중");
+			/* 다만 main 전체가 떴다가 아래가 사라짐.. */
+			$('.join').hide();
+			$('.login').hide();
+	},
+	error : function() {
+		alert('로그인안된 초기 상태');
+		console.log('로그인안된 초기 상태');
+		/* 다만 main 전체가 떴다가 아래가 사라짐.. */
+		$('.jy-mypage').hide();
+		$('.logout').hide();
+	}
+
+});
+
+
 $('.logo').click(function() {
 	alert("홈으로 갈끄야!");
 	console.log("홈으로 갈끄야!");
+	
+
 	
 /* 	if() {
 		
@@ -338,10 +362,6 @@ $('.logo').click(function() {
 
 <script>
 
-alert("페이지 열림!!!!");
-console.log("페이지 열림!!!!");
-	 
-	 
 	/* 로그인 & 회원가입 dialog slide page */
 	(function() {
 
@@ -369,7 +389,7 @@ console.log("페이지 열림!!!!");
 							var yunemail = $('#jy-user_email').val();
 							var yunregex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
 							if (yunregex.test(yunemail)) {
-								$.get("http://192.168.0.146:55555/id", {
+								$.get("http://192.168.0.36:55555/id", {
 									id : $('#jy-user_email').val()
 								}, function(data) {
 									if (data.result === 'yes') {
@@ -457,7 +477,7 @@ console.log("페이지 열림!!!!");
 
 			}
 
-		})
+		});
 
 		/* -------------------  */
 
@@ -486,9 +506,6 @@ console.log("페이지 열림!!!!");
 						if (data.loginUser) {
 							alert(data.loginUser.name + "님 로그인 되었습니다.");
 							location.href = 'jy_main.html';
-							/* 어떻게 해야 할까?? */
-							/* $('.join').hide();
-							$('.login').hide(); */
 							
 						} else {
 							$('#jy-login-check').html('아이디 혹은 비밀번호가 맞지 않습니다.');
@@ -502,16 +519,9 @@ console.log("페이지 열림!!!!");
 				});
 			}
 
-		})
+		});
 		/* -------------------  */
 		
-		/* 로그아웃 자바스크립트  */
-
-		$('#jy-btn-logout').click(function() {
-
-
-		})
-		/* -------------------  */
 
 		/* 사업자 메시지 보이기 */
 		$('.jy-register-alert').hide();
@@ -519,15 +529,14 @@ console.log("페이지 열림!!!!");
 		$('#jy-chk-user1').click(function(){
 			//$('#jy-chk-user1').attr("checked") == "checked";
 			$('.jy-register-alert').hide();
-		})
+		});
 		
 		$('#jy-chk-user2').click(function(){
 			//$('#jy-chk-user1').attr("checked") == "checked";
 			$('.jy-register-alert').show();
-		})
+		});
 
 		/* 로그인 페이지에서 회원가입 버튼 누르면 회원가입 페이지로 넘어가기 */
-		
 		
  		$('#jy-btn-gojoin').click(function(){
 			alert("join click!"); 			
@@ -540,4 +549,26 @@ console.log("페이지 열림!!!!");
 	
 	
 	 
+</script>
+<script type="text/javascript">
+(function() {
+
+/* click to mypage account */
+$('.jy-mypage').click(function() {
+	alert("마이페이지 입니다!");
+	console.log("마이페이지 입니다!");
+});
+
+/* -------------------  */
+
+/* 로그아웃 자바스크립트  */
+$('.logout').click(function() {
+	alert("로그아웃되어야한다!!");
+	console.log("로그아웃되어야한다!!");
+});
+
+/* -------------------  */
+
+})();
+
 </script>

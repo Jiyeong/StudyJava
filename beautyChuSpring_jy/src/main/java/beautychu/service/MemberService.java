@@ -1,12 +1,12 @@
-package beautyChu.service;
+package beautychu.service;
 
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import beautyChu.dao.MemberDao;
-import beautyChu.domain.Member;
+import beautychu.dao.MemberDao;
+import beautychu.domain.Member;
 
 @Service
 public class MemberService {
