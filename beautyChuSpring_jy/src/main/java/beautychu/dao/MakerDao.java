@@ -1,7 +1,5 @@
-package beautyChu.dao;
+package beautychu.dao;
 
-import java.util.List;
-import beautyChu.domain.Maker;
 
 public interface MakerDao {
  

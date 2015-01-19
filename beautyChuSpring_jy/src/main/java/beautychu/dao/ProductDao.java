@@ -1,4 +1,4 @@
-package beautyChu.dao;
+package beautychu.dao;
 
 
 /* myBatis에서 DAO 클래스를 만들 때 

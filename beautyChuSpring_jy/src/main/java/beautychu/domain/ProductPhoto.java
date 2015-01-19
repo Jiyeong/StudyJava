@@ -1,4 +1,4 @@
-package beautyChu.domain;
+package beautychu.domain;
 
 import java.io.Serializable;
 

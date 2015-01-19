@@ -13,6 +13,15 @@
 
 <style type="text/css">
 	/* 스타일 적용 공간! */
+	
+/* left sub menu */	
+.mypage-menu { line-height:30px; height:auto; width:150px; float:left;
+    padding:5px; margin-left: 10px; margin-top: 10px;}
+.mypage-title { text-align: center; font-size: 1.5em;}
+.mypage-uname { text-align: center; font-size: 12px;}
+.mypage-munu-list { margin-left: 20px;}
+
+/* personalinfo CSS */	
 .personalinfo { width: 1000px; margin: auto;}
 .pinfo-form {  border: 3px solid gray; border-radius:10px; padding: 40px; margin-top:100px; }
 .pinfo-data { text-align: center;}
@@ -46,7 +55,7 @@
 .jy-btn-exit-fin { float: right;}   
 
 
-hr { display: block; }
+hr { display: block; margin-bottom: 30px;}
 
 /* bring at "jy_demo.css" */
 a, button { color: #74716D; text-decoration: none; outline: none;}
@@ -69,14 +78,25 @@ button.trigger { background: black; color: #fff; border: none;}
 
 	<div id="wrap-chu" class="wrap-chu">
 	
+	<div class="mypage-menu">
+	<hr style="display: block; ">
+	<h2 class="mypage-title">MyPage</h2>
+	<p class="mypage-uname">user name 님</p>
+	<hr style="display: block; ">
+	<ul class="mypage-munu-list">
+	<li class="mp-infomdf" id="mp-infomdf"><a href="jy_personalinfo.html">My Info</a></li>
+	<li class="mp-coupon" id="mp-coupon"><a href="jy_mycoupon.html">My Coupon</a></li>
+	</ul>
+	</div>
+	
 		<section class='personalinfo' id='personalinfo'>
 			<div class='pinfo-form'>
 				<div class='title-pinfo'>
-					<label>회원 정보 변경</label>
+					<label>MY INFO</label>
 				</div>
 				
 				<div>
-				<hr><!-- 선보이게 할 것.  -->
+				<hr style="display: block; ">
 				</div>
 				
 				<div class='pinfo-data'>
@@ -94,7 +114,7 @@ button.trigger { background: black; color: #fff; border: none;}
 							<div class='jy-input-mdf-email'>
 								<input name='mdf-user_email' class='jy-form-control-modify'
 									id='jy-mdf-user_email' type='email' maxlength='100'
-									placeholder='appchu@beautychu.com' disabled>
+									 value="" placeholder='' disabled>
 								<!-- 이메일입력 -->
 							</div>
 							<!-- /.row -->
@@ -189,13 +209,13 @@ button.trigger { background: black; color: #fff; border: none;}
 				
 
 				<div class='jy-pinfo-btn-area'>
-					<button id=jy-btn-pinfo-fin class='jy-btn-pinfo-fin' type='button'>
+					<button id='jy-btn-pinfo-fin' class='jy-btn-pinfo-fin' type='button'>
 						<span class='jy-btn-fin'>완료</span>
 					</button>
 					<button id='jy-btn-cancel' class='jy-btn-cancel' type='reset'>
 						<span class='jy-btn-cancel'>취소</span>
 					</button>
-					<button id=jy-btn-exit-fin class='jy-btn-exit-fin' type='button'>
+					<button id='jy-btn-exit-fin' class='jy-btn-exit-fin' type='button'>
 						<span class='jy-btn-exit'>회원 탈퇴</span>
 					</button>
 
@@ -203,7 +223,7 @@ button.trigger { background: black; color: #fff; border: none;}
 				
 				</form>
 				</div>
-				<hr>
+				
 			</div>
 		</section>
 
@@ -223,7 +243,116 @@ function JYonlyNumber() {
 	if((event.keyCode < 48) || (event.keyCode > 57))
 		event.returnValue = false;
 }
+/* 사이트 열자마자 ajax로 로긴 여부 체크하고 계정 정보 미리 가져오기*/
+$.ajax({
+	type : 'get',
+	dataType : "json",
+	url : '../json/auth/loginUser.do',
+	success : function(data) {
+			
+		  /* Login Success */
+			if(data.status != 'fail') {
+				console.log("login : " + data.status);
+				console.log("email get : " + data.status);
+				console.log(data.loginUser);
+				$('#jy-mdf-user_email').val(data.loginUser.email);
+				$('#jy-mdf-user_nickname').val(data.loginUser.name);
+				$('#jy-mdf-user_addr').val(data.loginUser.address);
+				
+				if(data.loginUser.phone != null) {
+				$('#jy-mdf-user_phone1').val((data.loginUser.phone).substr(0,3));
+				$('#jy-mdf-user_phone2').val((data.loginUser.phone).substr(4,4));
+				$('#jy-mdf-user_phone3').val((data.loginUser.phone).substr(9,4));
+				}
+				console.log(data.loginUser.email);
+				
+				/* 다만 main 전체가 떴다가 아래가 사라짐.. */
+				$('.join').hide();
+				$('.login').hide();
+				
+			/* Login Fail */	
+			} else {
+				console.log("login : " + data.status);
+				location.href = 'jy_main.html';
+				/* 다만 main 전체가 떴다가 아래가 사라짐.. */
+				//$('.jy-mypage').hide();
+				//$('.logout').hide();
+			}
+			
+	},
+	error : function() {
+		console.log('로그인 ajax 실패');
+		console.log('계정 얻기 ajax 실패');
+		
+	}
 
+});
+
+
+/* 회원 정보 변경하기 */
+$('#jy-btn-pinfo-fin').click(function() {
+
+	$.ajax({
+		type : 'post',
+		dataType : "json",
+		url : '../json/user/updateUser.do',
+		data : {
+			email : $('#jy-mdf-user_email').val(),
+			name : $('#jy-mdf-user_nickname').val(),
+			address : $('#jy-mdf-usr_addr').val(),
+			phone : $('#jy-mdf-user_phone1').val() + "-"
+							+ $('#jy-mdf-user_phone2').val() + "-"
+							+ $('#jy-mdf-user_phone3').val(),
+			password : $('#jy-mdf-user_pw').val()
+		},
+		success : function(data) {
+			if(data.loginUser.email != null){
+			console.log("update : " + data.status);
+			console.log(data.loginUser);
+			//console.log(data.loginUser.phone.substr(0,3));
+			alert("회원 정보가 변경되었습니다.");
+			} else {
+				console.log("회원 계정을 찾지 못하였습니다.");
+			}
+		},
+		error : function() {
+			console.log('회원 정보 변경 ajax 실패');
+		}
+
+	});
+
+});
+
+
+/* 회원 탈퇴하기 */
+$('#jy-btn-exit-fin').click(function() {
+
+	$.ajax({
+		type : 'post',
+		dataType : "json",
+		url : '../json/user/deleteUser.do',
+		data : {
+			email : $('#jy-mdf-user_email').val()
+		}, 
+		success : function(data) {
+			if(data.loginUser == null){
+			console.log("delete : " + data.status);
+			console.log(data.loginUser);
+			alert("회원 탈퇴 되었습니다.");
+			location.href = 'jy_main.html';
+			} else {
+				console.log(data.status);
+				console.log(data.loginUser);
+				console.log(data.loginUser.email);
+				alert("회원 탈퇴하지 못하였습니다.");
+			}
+		},
+		error : function() {
+			console.log('회원 탈퇴 ajax 실패');
+		}
+
+	});
+});
 </script>
 
 

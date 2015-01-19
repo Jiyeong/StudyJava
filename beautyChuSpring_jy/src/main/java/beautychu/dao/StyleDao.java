@@ -1,9 +1,7 @@
-package beautyChu.dao;
+package beautychu.dao;
 
 import java.util.List;
-import java.util.Map;
 
-import beautychu.domain.Member;
 import beautychu.domain.Style;
 
 public interface StyleDao {

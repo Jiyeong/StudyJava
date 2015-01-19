@@ -1,11 +1,9 @@
-package beautyChu.service;
-
-import java.util.List;
-import beautyChu.dao.MakerDao;
-import beautyChu.domain.Maker;
+package beautychu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import beautychu.dao.MakerDao;
 
 @Service
 public class MakerService {

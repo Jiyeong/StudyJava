@@ -423,3 +423,9 @@
 
 /* 메뉴바 */
 .jy-mypage { text-indent: 0;}
+
+/* 메뉴바 닉네임 */
+.user-nickname { color: white; background-color: rgba(22, 22, 22, 1); 
+								border: 1px solid rgba(22, 22, 22, 1); 
+								width: 90px;
+								}

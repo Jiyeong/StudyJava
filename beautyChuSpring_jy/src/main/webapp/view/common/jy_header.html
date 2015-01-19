@@ -113,11 +113,13 @@
 			<!-- 로그인 후 -->
 			<!-- <li id="after-login"> -->
 			<li class="jy-mypage" id="jy-mypage">
-			<a title="마이페이지" style="text-indent: 0;">
+			<a href="jy_personalinfo.html"title="마이페이지" 
+				 style="text-indent: 0; padding: 0; text-align: center;">
 			<img src="../img/logo_appchu.jpg" width="20" height="20"
 								class="img-circle img-responsive" id="user-mypage" alt="" 
 								style="border-radius:5px; margin: 25px 5px;"/>
-								<span class="user-nickname" id="user-mypage"></span>					
+								<input class="user-nickname" id="user-mypage" value="" disabled>
+								<!-- <span class="user-nickname" id="user-mypage"></span>	 -->		
 			</a></li>
 			<li class="logout" id="logout">
 			<a title="로그아웃">logout</a></li>
@@ -319,44 +321,40 @@
 
 <script>
 //alert("beautyChu에 방문해 주셔서 감사합니다^^");
-//console.log("beautyChu에 방문해 주셔서 감사합니다^^");
+
 
 /* 사이트 열자마자 ajax로 로긴 여부 체크하여 page open */
 $.ajax({
-	type : 'post',
+	type : 'get',
 	dataType : "json",
 	url : '../json/auth/loginUser.do',
-	success : function() {
-			alert("로그인 유지 중");
-			console.log("로그인 유지 중");
-			/* 다만 main 전체가 떴다가 아래가 사라짐.. */
-			$('.join').hide();
-			$('.login').hide();
+	success : function(data) {
+			
+			if(data.status != 'fail') {
+				console.log("login"+data.status);
+				$('.user-nickname').val(data.loginUser.name);
+				/* 다만 main 전체가 떴다가 아래가 사라짐.. */
+				$('.join').hide();
+				$('.login').hide();
+				
+			/* } else if (data.status == 'fail') { */
+				} else {
+				console.log("login"+data.status);
+				/* 다만 main 전체가 떴다가 아래가 사라짐.. */
+				$('.jy-mypage').hide();
+				$('.logout').hide();
+			}
+			
 	},
 	error : function() {
-		alert('로그인안된 초기 상태');
-		console.log('로그인안된 초기 상태');
-		/* 다만 main 전체가 떴다가 아래가 사라짐.. */
-		$('.jy-mypage').hide();
-		$('.logout').hide();
+		console.log('로그인 ajax 실패');
+		
 	}
 
 });
 
+/* -------------------  */
 
-$('.logo').click(function() {
-	alert("홈으로 갈끄야!");
-	console.log("홈으로 갈끄야!");
-	
-
-	
-/* 	if() {
-		
-	} else if () {
-		
-	} */
-	
-})
 
 </script>
 
@@ -394,16 +392,20 @@ $('.logo').click(function() {
 								}, function(data) {
 									if (data.result === 'yes') {
 										$('#jy-email-check').html(
-												'사용가능한 아이디 입니다.');
+												'사용가능한 아이디 입니다.')
+												.css("color","blue");
 										joinpass = 1;
 									} else if (data.result === 'no') {
 										$('#jy-email-check').html(
-												'중복된 아이디가 있습니다.');
+												'중복된 아이디가 있습니다.')
+												.css("color","red");
 										joinpass = 0;
 									}
 								})
 							} else {
-								$('#jy-email-check').html("잘못된 이메일 형식입니다.");
+								$('#jy-email-check').html("잘못된 이메일 형식입니다.")
+								.css("color","red");
+								
 								joinpass = 0;
 
 							}
@@ -419,10 +421,10 @@ $('.logo').click(function() {
 				$('#jy-pw-check').html("비밀번호를 입력해주세요.");
 				passwordpass = 0;
 			} else if (password1 === password2) {
-				$('#jy-pw-check').html("패스워드가 일치 합니다.^^");
+				$('#jy-pw-check').html("패스워드가 일치 합니다.^^").css("color","blue");
 				passwordpass = 1;
 			} else {
-				$('#jy-pw-check').html("패스워드가 일치하지 않습니다..");
+				$('#jy-pw-check').html("패스워드가 일치하지 않습니다..").css("color","red");
 				passwordpass = 0;
 			}
 		}
@@ -441,7 +443,7 @@ $('.logo').click(function() {
 
 		$('#jy-btn-join-fin').click(function() {
 			if (passwordpass === 0) {
-				$('#jy-pw-check').html("패스워드를 동일하게 입력해 주세요.");
+				$('#jy-pw-check').html("패스워드를 동일하게 입력해 주세요.").css("color","red");
 
 			}
 			/* 
@@ -450,7 +452,7 @@ $('.logo').click(function() {
 			}
 			 */
 			else if (joinpass === 0) {
-				$('#jy-pw-check').html("올바른 아이디를 입력해 주세요.");
+				$('#jy-pw-check').html("올바른 아이디를 입력해 주세요.").css("color","red");
 			} else {
 
 				$.ajax({
@@ -463,9 +465,9 @@ $('.logo').click(function() {
 						password : $('#jy-confirm_pw').val()
 					},
 					success : function(data) {
-						console.log(data.status);
+						console.log("join"+data.status);
 						console.log(data.loginUser);
-						alert("가입이 완료되었습니다.\n로그인 해주세요.");
+						alert("가입이 완료되었습니다.\n 환영합니다^^");
 						location.href = 'jy_main.html';
 
 					},
@@ -489,9 +491,9 @@ $('.logo').click(function() {
 			var password = $('#jy-inputPassword').val();
 
 			if (email === '') {
-				$('#jy-login-check').html('이메일을 입력 해주세요.');
+				$('#jy-login-check').html('이메일을 입력 해주세요.').css("color","red");
 			} else if (password === '') {
-				$('#jy-login-check').html('비밀번호를 입력 해주세요.');
+				$('#jy-login-check').html('비밀번호를 입력 해주세요.').css("color","red");
 			} else {
 
 				$.ajax({
@@ -504,11 +506,12 @@ $('.logo').click(function() {
 					},
 					success : function(data) {
 						if (data.loginUser) {
-							alert(data.loginUser.name + "님 로그인 되었습니다.");
+							console.log("login"+data.status);
+							alert(data.loginUser.name + " 님 로그인 되었습니다.");
 							location.href = 'jy_main.html';
 							
 						} else {
-							$('#jy-login-check').html('아이디 혹은 비밀번호가 맞지 않습니다.');
+							$('#jy-login-check').html('아이디 혹은 비밀번호가 맞지 않습니다.').css("color","red");
 
 						}
 					},
@@ -521,6 +524,14 @@ $('.logo').click(function() {
 
 		});
 		/* -------------------  */
+		
+	  /* 로그인 페이지에서 회원가입 버튼 누르면 회원가입 페이지로 넘어가기 */
+ 		$('#jy-btn-gojoin').click(function(){
+			//alert("join click!"); 			
+			//$('.join').
+			//$('.join').click();
+			//$('#joindialog').show();
+		})
 		
 
 		/* 사업자 메시지 보이기 */
@@ -536,38 +547,46 @@ $('.logo').click(function() {
 			$('.jy-register-alert').show();
 		});
 
-		/* 로그인 페이지에서 회원가입 버튼 누르면 회원가입 페이지로 넘어가기 */
-		
- 		$('#jy-btn-gojoin').click(function(){
-			alert("join click!"); 			
-			//$('.join').
-			
-		})
+
 		
 		
 	})();
 	
-	
+
 	 
 </script>
 <script type="text/javascript">
-(function() {
 
-/* click to mypage account */
-$('.jy-mypage').click(function() {
-	alert("마이페이지 입니다!");
-	console.log("마이페이지 입니다!");
-});
+	(function() {
+		/* click to mypage account */
+		$('.jy-mypage').click(function() {
+			alert("마이페이지 입니다!");
+			console.log("마이페이지 입니다!");
+		});
 
-/* -------------------  */
+		/* -------------------  */
 
-/* 로그아웃 자바스크립트  */
-$('.logout').click(function() {
-	alert("로그아웃되어야한다!!");
-	console.log("로그아웃되어야한다!!");
-});
+		/* 로그아웃 자바스크립트  */
+		$('.logout').click(function() {
+			
+			$.ajax({
+				dataType : "json",
+				url : '../json/auth/logout.do',
+				success : function() {
+					console.log('로그아웃 되었습니다.');
+				  alert("로그아웃 되었습니다.");
+				  location.href = 'jy_main.html';
+				},
+				error : function() {
+					console.log('로그아웃 ajax 실패 ');
+				}
+			});
 
-/* -------------------  */
+		});
+		/* -------------------  */
+
+
+
 
 })();
 

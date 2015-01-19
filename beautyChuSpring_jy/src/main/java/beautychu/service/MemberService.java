@@ -23,4 +23,12 @@ public class MemberService {
 	public void insertUser(Member member) {
 		memberDao.insertUser(member);
 	}
+	
+	public void updateUser(Member member) {
+	  memberDao.updateUser(member);
+	}
+	
+	public void deleteUser(Member member) {
+	  memberDao.deleteUser(member);
+	}
 }

@@ -1,4 +1,4 @@
-package beautyChu.control.json;
+package beautychu.control.json;
 
 import java.util.HashMap;
 

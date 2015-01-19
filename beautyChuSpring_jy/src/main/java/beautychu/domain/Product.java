@@ -14,7 +14,7 @@
  * 
  * 6) toString() 오버라이딩
  */
-package beautyChu.domain;
+package beautychu.domain;
 
 import java.io.Serializable;
 import java.util.Date;
