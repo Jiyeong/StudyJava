@@ -11,8 +11,8 @@ public class CouponService {
   CouponDao couponDao;
 
 
-public void makeCoupon(Coupon coupon) {
+/*public void makeCoupon(Coupon coupon) {
   couponDao.makeCoupon(coupon);
-}
+}*/
 
 }

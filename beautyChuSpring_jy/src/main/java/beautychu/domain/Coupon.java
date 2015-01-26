@@ -13,8 +13,8 @@ public class Coupon implements Serializable {
   int discount;
   int cost;
   String cContent;
-  String email;
-  String email2;
+  String cemail;
+  String semail;
   
   public String getLicenseeNo() {
     return licenseeNo;
@@ -64,17 +64,17 @@ public class Coupon implements Serializable {
   public void setcContent(String cContent) {
     this.cContent = cContent;
   }
-  public String getEmail() {
-    return email;
+  public String getCemail() {
+    return cemail;
   }
-  public void setEmail(String email) {
-    this.email = email;
+  public void setCemail(String cemail) {
+    this.cemail = cemail;
   }
-  public String getEmail2() {
-    return email2;
+  public String getSemail() {
+    return semail;
   }
-  public void setEmail2(String email2) {
-    this.email2 = email2;
+  public void setSemail(String semail) {
+    this.semail = semail;
   }
   
   
@@ -83,7 +83,7 @@ public class Coupon implements Serializable {
     return "Coupon [licenseeNo=" + licenseeNo + ", couponCode=" + couponCode
         + ", endDate=" + endDate + ", startDate=" + startDate + ", useDate="
         + useDate + ", discount=" + discount + ", cost=" + cost + ", cContent="
-        + cContent + ", email=" + email + ", email2=" + email2 + "]";
+        + cContent + ", cemail=" + cemail + ", semail=" + semail + "]";
   }
   
 
